@@ -4,3 +4,8 @@ dist/
 *.log
 .DS_Store
 data/
+
+# local artifacts
+rea-source/
+.playwright-mcp/
+bin/cloudflared.exe
