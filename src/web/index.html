@@ -1,0 +1,105 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>REA Chat</title>
+<link rel="stylesheet" href="/style.css" />
+<link rel="icon" href="/favicon.svg" />
+</head>
+<body>
+
+<div class="login-screen" id="login">
+  <div class="login-card">
+    <div class="login-logo">REA<span>Chat</span></div>
+    <p class="login-sub">Bem-vindo de volta!</p>
+    <form id="login-form" autocomplete="off">
+      <label class="field-label" for="username">Nome de usuario</label>
+      <input id="username" name="username" maxlength="32" placeholder="Como devemos te chamar?" required />
+      <div class="login-error" id="login-error" hidden></div>
+      <button type="submit" class="btn-primary">Entrar</button>
+    </form>
+    <div class="login-tools" id="login-tools">Conectando ao servidor…</div>
+  </div>
+</div>
+
+<div class="app" id="app" hidden>
+  <nav class="guild-rail">
+    <div class="guild-list" id="guild-list"></div>
+    <button class="rail-btn rail-add" id="add-guild" title="Criar servidor">+</button>
+    <div class="rail-sep"></div>
+    <button class="rail-btn" id="open-dm-list" title="Mensagens diretas">DM</button>
+  </nav>
+
+  <aside class="sidebar">
+    <header class="sidebar-header">
+      <span id="guild-name">REA Server</span>
+      <button class="icon-btn" id="guild-settings" title="Configuracoes do servidor">⚙</button>
+    </header>
+    <div class="sidebar-scroll" id="channel-list"></div>
+    <footer class="user-bar">
+      <div class="user-bar-me" id="me-block">
+        <div class="avatar avatar-sm" id="me-avatar">?</div>
+        <div class="user-bar-text">
+          <span class="user-bar-name" id="me-name">—</span>
+          <span class="user-bar-tag" id="me-tag">#0000</span>
+        </div>
+      </div>
+      <div class="user-bar-actions">
+        <button class="icon-btn" id="btn-status" title="Status">●</button>
+        <button class="icon-btn" id="btn-settings" title="Configuracoes">⚙</button>
+      </div>
+    </footer>
+  </aside>
+
+  <main class="chat">
+    <header class="chat-header">
+      <div class="chat-header-left">
+        <span class="channel-hash" id="channel-icon">#</span>
+        <span class="chat-title" id="channel-name">selecione um canal</span>
+        <span class="chat-topic" id="channel-topic"></span>
+      </div>
+      <div class="chat-header-right">
+        <input class="search-input" id="search-input" placeholder="Buscar mensagens…" />
+        <button class="icon-btn" id="btn-members" title="Membros">👥</button>
+      </div>
+    </header>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="typing" id="typing"></div>
+
+    <form class="composer" id="composer" autocomplete="off">
+      <div class="composer-reply" id="composer-reply" hidden>
+        <span id="composer-reply-text"></span>
+        <button type="button" class="icon-btn" id="cancel-reply">✕</button>
+      </div>
+      <div class="composer-attachments" id="composer-attachments" hidden></div>
+      <div class="composer-row">
+        <button type="button" class="icon-btn composer-plus" id="btn-attach" title="Anexar arquivo">+</button>
+        <input type="file" id="file-input" multiple hidden />
+        <textarea id="input" rows="1" placeholder="Enviar mensagem em #geral" maxlength="8000"></textarea>
+        <button type="submit" class="btn-send" title="Enviar">➤</button>
+      </div>
+      <div class="composer-hint">Enter para enviar · Shift+Enter para nova linha · Comece com / para comandos REA</div>
+    </form>
+  </main>
+
+  <aside class="members" id="members-panel">
+    <div class="members-header">
+      <span id="online-count">Online — 0</span>
+      <button class="icon-btn" id="close-members">✕</button>
+    </div>
+    <div class="members-scroll" id="member-list"></div>
+  </aside>
+</div>
+
+<div class="modal-backdrop" id="modal" hidden>
+  <div class="modal" id="modal-body"></div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>
