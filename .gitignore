@@ -9,3 +9,6 @@ data/
 rea-source/
 .playwright-mcp/
 bin/cloudflared.exe
+
+# extracted from Discord.exe (proprietary bootstrapper + splash art)
+.rea-extract/

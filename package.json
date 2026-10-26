@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "rea-cli",
   "version": "2.0.0",
   "description": "CLI for the REA (Reverse Engineer Anything) MCP tool catalog",
@@ -24,8 +24,8 @@
     "node": ">=20.10.0"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/main.js",
+    "build": "tsc -p tsconfig.json && node -e \"const fs=require('fs');fs.cpSync('src/web','dist/web',{recursive:true})\"",
+    "start": "node dist/main.js serve",
     "dev": "tsx src/main.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --test --import tsx tests/*.test.ts",
