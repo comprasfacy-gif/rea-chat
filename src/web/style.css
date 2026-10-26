@@ -1,4 +1,13 @@
-﻿@font-face {
+﻿#boot-splash { position: fixed; inset: 0; z-index: 3000; display: grid; place-items: center; background: #282b30; transition: opacity .25s ease; }
+#boot-splash.hide { opacity: 0; pointer-events: none; }
+#boot-splash .splash-inner { text-align: center; }
+#boot-splash video, #boot-splash img { width: 200px; height: 200px; visibility: hidden; }
+#boot-splash video.loaded { visibility: visible; }
+#boot-splash .splash-text { position: relative; top: -30px; }
+#boot-splash .splash-text > span { display: block; color: #8a8e94; font-family: var(--font-primary); font-size: 12px; font-weight: 600; }
+#boot-splash .splash-text > span.splash-status { color: #fff; font-weight: 500; font-size: 16px; font-variant-numeric: tabular-nums; }
+#boot-splash .progress-placeholder { margin-top: 10px; height: 8px; }
+@font-face {
   font-family: "gg sans";
   font-weight: 400;
   font-style: normal;

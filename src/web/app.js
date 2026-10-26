@@ -1,4 +1,4 @@
-
+﻿
 const $ = (id) => document.getElementById(id);
 
 const state = {
@@ -489,6 +489,7 @@ function handleReady(data) {
     state.guilds = [{ id: "rea", name: "REA Chat", channels: data.channels || [], members: [], roles: [] }];
   }
   if (els["login"]) els["login"].style.display = "none";
+  if (typeof splashHide === "function") splashHide();
   if (els["app"]) { els["app"].removeAttribute("hidden"); els["app"].style.display = "grid"; }
   if (state.me) {
     if (els.meName) els.meName.textContent = state.me.username || "?";
@@ -722,11 +723,48 @@ function setupLogin() {
   });
 }
 
+const SPLASH_QUOTES = [
+  "Aborbing the Contents",
+  "Additive Parsing the Load",
+  "Commence Monosaturated Goodening",
+  "Kick Off the Multi-Core Widening",
+  "Bastening the Game Turkey",
+  "Abstracting the Rummage Disc",
+  "Undecerealenizing the Process",
+  "Postrefragmenting the Widget Layer",
+  "Satisfying the Constraints",
+  "Abnoramalzing Some of the Matrices",
+  "Optimizing the People",
+  "Proclaigerizing the Network"
+];
+
+function splashStatus(text) {
+  const el = document.getElementById("boot-status");
+  if (el) el.textContent = text;
+}
+
+function splashHide() {
+  const el = document.getElementById("boot-splash");
+  if (!el) return;
+  el.classList.add("hide");
+  setTimeout(function () { el.remove(); }, 300);
+}
+
+function splashQuote() {
+  return SPLASH_QUOTES[Math.floor(Math.random() * SPLASH_QUOTES.length)];
+}
+
 function boot() {
+  const video = document.getElementById("boot-video");
+  if (video) video.addEventListener("loadeddata", function () { video.classList.add("loaded"); });
+  splashStatus("Checking for updates...");
+  setTimeout(function () { splashStatus("Connecting..."); }, 350);
+  setTimeout(function () { splashStatus(splashQuote()); }, 700);
   setupLogin();
   setupComposer();
   const saved = localStorage.getItem("rea-username");
   if (saved) connectWs(saved);
+  else setTimeout(splashHide, 900);
 }
 
 if (document.readyState === "loading") {

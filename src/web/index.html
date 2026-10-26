@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="pt-BR" class="theme-dark">
 <head>
 <meta charset="utf-8" />
@@ -9,6 +9,17 @@
 </head>
 <body>
 <div id="app-mount">
+<div id="boot-splash">
+  <div class="splash-inner">
+    <video autoplay muted loop playsinline id="boot-video" width="200" height="200">
+      <source src="/splash/connecting.webm" type="video/webm" />
+    </video>
+    <div class="splash-text">
+      <span class="splash-status" id="boot-status">Checking for updates...</span>
+      <div class="progress-placeholder">&nbsp;</div>
+    </div>
+  </div>
+</div>
 
 <div class="login-screen" id="login">
   <div class="login-card">
