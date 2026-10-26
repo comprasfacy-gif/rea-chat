@@ -35,11 +35,19 @@ const MIME: Record<string, string> = {
   ".txt": "text/plain; charset=utf-8",
 };
 
+interface VoiceMediaState {
+  audio: boolean;
+  video: boolean;
+  screen: boolean;
+}
+
 interface Client {
   id: string;
   socket: WebSocket;
   user?: User;
   voiceChannelId?: string;
+  voiceState?: VoiceMediaState;
+  speaking?: boolean;
 }
 
 interface ClientMessage {
@@ -71,6 +79,10 @@ interface ClientMessage {
   targetClientId?: string;
   muted?: boolean;
   deafened?: boolean;
+  audio?: boolean;
+  video?: boolean;
+  screen?: boolean;
+  speaking?: boolean;
 }
 
 export interface ServerOptions {
@@ -206,8 +218,26 @@ export async function startServer(options: ServerOptions): Promise<void> {
   function broadcastVoiceState(): void {
     const states = [...clients]
       .filter((c) => c.user && c.voiceChannelId)
-      .map((c) => ({ channelId: c.voiceChannelId, user: publicUser(c.user as User), clientId: c.id }));
+      .map((c) => ({
+        channelId: c.voiceChannelId,
+        user: publicUser(c.user as User),
+        clientId: c.id,
+        userId: (c.user as User).id,
+        audio: c.voiceState ? c.voiceState.audio : true,
+        video: c.voiceState ? c.voiceState.video : false,
+        screen: c.voiceState ? c.voiceState.screen : false,
+        speaking: c.speaking === true,
+      }));
     broadcast({ type: "voice-state", states });
+    for (const c of clients) {
+      if (!c.user) continue;
+      const own = states.find((s) => s.clientId === c.id);
+      if (!own) continue;
+      const peers = states
+        .filter((s) => s.channelId === own.channelId && s.clientId !== c.id)
+        .map((s) => ({ clientId: s.clientId, userId: s.userId, user: s.user }));
+      send(c, { type: "voice-peers", channelId: own.channelId, peers });
+    }
   }
 
   function snapshotFor(user: User): Record<string, unknown> {
@@ -469,12 +499,33 @@ export async function startServer(options: ServerOptions): Promise<void> {
               const channel = store.getChannel(parsed.channelId);
               if (!channel || channel.kind !== "voice") { send(client, { type: "error", message: "Canal de voz invalido" }); return; }
               client.voiceChannelId = channel.id;
+              client.voiceState = { audio: true, video: false, screen: false };
               broadcastVoiceState();
               return;
             }
 
             case "voice-leave": {
               client.voiceChannelId = undefined;
+              client.voiceState = undefined;
+              client.speaking = false;
+              broadcastVoiceState();
+              return;
+            }
+
+            case "voice-media": {
+              if (!client.voiceChannelId || !client.voiceState) return;
+              if (typeof parsed.audio === "boolean") client.voiceState.audio = parsed.audio;
+              if (typeof parsed.video === "boolean") client.voiceState.video = parsed.video;
+              if (typeof parsed.screen === "boolean") client.voiceState.screen = parsed.screen;
+              broadcastVoiceState();
+              return;
+            }
+
+            case "voice-speaking": {
+              if (!client.voiceChannelId) return;
+              const next = parsed.speaking === true;
+              if (client.speaking === next) return;
+              client.speaking = next;
               broadcastVoiceState();
               return;
             }

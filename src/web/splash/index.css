@@ -39,17 +39,8 @@
   --xbox: #107c10;
 }
 
-@font-face {
-  font-family: gg sans;
-  font-weight: 400;
-  src: url('./fonts/ggsans-400-normal.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: gg sans;
-  font-weight: 500;
-  src: url('./fonts/ggsans-500-medium.woff2') format('woff2');
-}
+/* gg sans woff2 extracted from Discord app.asar is truncated/corrupt (invalid sfntVersion),
+   so the official Discord font stack is used as fallback. */
 
 * {
   box-sizing: border-box;
